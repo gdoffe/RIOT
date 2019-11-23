@@ -55,6 +55,7 @@
 uint32_t qdecs[QDEC_NUMOF];
 /* QDEC values for each device, should be set externally */
 int32_t  qdecs_value[QDEC_NUMOF];
+qdec_mode_t qdecs_mode[QDEC_NUMOF];
 
 int32_t qdec_init(qdec_t qdec, qdec_mode_t mode, qdec_cb_t cb, void *arg)
 {
@@ -71,13 +72,15 @@ int32_t qdec_init(qdec_t qdec, qdec_mode_t mode, qdec_cb_t cb, void *arg)
     switch (mode) {
         /* X1 mode */
         case QDEC_X1:
-            break;
         case QDEC_X2:
         case QDEC_X4:
+            break;
         default:
             errno = EINVAL;
             goto err_invalid_mode;
     }
+
+    qdecs_mode[qdec] = mode;
 
     /* Initialize qdec channels */
     for (uint8_t i = 0; i < QDEC_NUMOF; i++) {
