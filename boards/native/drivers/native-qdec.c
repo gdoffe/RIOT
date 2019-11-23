@@ -19,10 +19,12 @@
 /* RIOT includes */
 #include <board.h>
 #include <log.h>
+#include <periph/qdec.h>
 
 #ifdef MODULE_PERIPH_QDEC
 
 extern int32_t qdecs_value[QDEC_NUMOF];
+extern qdec_mode_t qdecs_mode[QDEC_NUMOF];
 
 void native_motor_driver_qdec_simulation(
     const motor_driver_t motor_driver, uint8_t motor_id,
@@ -38,7 +40,7 @@ void native_motor_driver_qdec_simulation(
     id += motor_id;
 
     if (id < QDEC_NUMOF) {
-        qdecs_value[id] = pwm_duty_cycle;
+        qdecs_value[id] = pwm_duty_cycle * qdecs_mode[id];
 
         LOG_DEBUG("MOTOR-DRIVER=%u"             \
             "    MOTOR_ID = %u"                 \
