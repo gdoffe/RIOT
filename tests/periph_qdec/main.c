@@ -45,7 +45,7 @@ int main(void)
     puts("Quadrature decoding mode is set to X4 : counting on all edges on both signals");
 
     for (i = 0; i < QDEC_NUMOF; i++) {
-        int32_t error = qdec_init(QDEC_DEV(i), QDEC_X4, handler, (void *)i);
+        int32_t error = qdec_init(QDEC_DEV(i), QDEC_X1, handler, (void *)i);
         if (error) {
             fprintf(stderr,"Not supported mode !\n");
             return error;

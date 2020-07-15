@@ -77,6 +77,15 @@ extern "C" {
 #endif
 
 /**
+ * @brief I2C configuration
+ * @{
+ */
+#ifndef I2C_NUMOF
+#define I2C_NUMOF (8U)
+#endif
+/** @} */
+
+/**
  * @name SPI configuration (Linux host only)
  * @{
  */

@@ -19,6 +19,9 @@
 #ifndef PERIPH_CPU_H
 #define PERIPH_CPU_H
 
+#include <inttypes.h>
+#include <stdio.h>
+
 #include "periph/dev_enums.h"
 
 #ifdef __cplusplus
@@ -100,6 +103,34 @@ typedef enum {
 #define EEPROM_SIZE             (1024U)  /* 1kB */
 #endif
 /** @} */
+
+/**
+ * @name    Use the shared I2C functions
+ * @{
+ */
+/** Use read reg function from periph common */
+#define PERIPH_I2C_NEED_READ_REG
+#define PERIPH_I2C_NEED_READ_REGS
+/** Use write reg function from periph common */
+#define PERIPH_I2C_NEED_WRITE_REG
+#define PERIPH_I2C_NEED_WRITE_REGS
+/** @} */
+
+/**
+ * @brief   I2C configuration structure type
+ */
+typedef struct {
+    unsigned int addr;
+    int (*read_bytes)(void *data, size_t len, uint8_t flags);
+    int (*write_bytes)(const void *data, size_t len, uint8_t flags);
+} i2c_native_dev_t;
+
+/**
+ * @brief   I2C configuration structure type
+ */
+typedef struct {
+    i2c_native_dev_t emulated[1024];
+} i2c_conf_t;
 
 #ifdef __cplusplus
 }

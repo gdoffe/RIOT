@@ -52,7 +52,7 @@
 #define NATIVE_QDEC_MAX     (0x7FFFFFFFL)
 
 /* QDEC devices */
-uint32_t qdecs[QDEC_NUMOF];
+static uint32_t qdecs[QDEC_NUMOF];
 /* QDEC values for each device, should be set externally */
 int32_t  qdecs_value[QDEC_NUMOF];
 qdec_mode_t qdecs_mode[QDEC_NUMOF];

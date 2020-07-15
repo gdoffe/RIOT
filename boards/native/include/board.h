@@ -140,6 +140,23 @@ void native_motor_driver_qdec_simulation( \
     const motor_driver_t motor_driver, uint8_t motor_id, \
     int32_t pwm_duty_cycle);
 
+/**
+ * @name Describe emulated I2C devices
+ * @{
+ */
+static const i2c_conf_t i2c_config[I2C_NUMOF] = {
+    {
+        .emulated = {
+            {
+                .addr = 0x10,
+                .read_bytes = NULL,
+                .write_bytes = NULL,
+            },
+        },
+    },
+};
+/** @} */
+
 /* C++ standard do not support designated initializers */
 #if !(defined __cplusplus) && (defined MODULE_PERIPH_QDEC)
 
