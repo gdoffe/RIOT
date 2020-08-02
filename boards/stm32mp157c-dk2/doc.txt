@@ -1,0 +1,5 @@
+/**
+@defgroup    boards_stm32mp157c-dk2 STM32MP157C-DK2 board
+@ingroup     boards
+@brief       Support for the STM32MP157C-DK2 board
+ */

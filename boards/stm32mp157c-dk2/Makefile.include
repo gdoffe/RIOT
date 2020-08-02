@@ -1,0 +1,24 @@
+# we use shared STM32 configuration snippets
+INCLUDES += -I$(RIOTBOARD)/common/stm32/include
+
+# Uncomment this line to build firmware in Engineering mode (BOOT0 off and
+# BOOT2 on)
+#STM32MP1_ENGINEERING_MODE = 1
+
+# set default port depending on operating system
+PORT_LINUX ?= /dev/ttyACM0
+PORT_DARWIN ?= $(firstword $(sort $(wildcard /dev/tty.SLAB_USBtoUART*)))
+
+# setup serial terminal
+include $(RIOTMAKE)/tools/serial.inc.mk
+
+# this board has an on-board ST-link adapter
+OPENOCD_CORE = stm32mp15x.cm4
+OPENOCD_CONFIG = board/stm32mp15x_dk2.cfg
+GDB_PORT_CORE_OFFSET = 1
+
+FFLAGS ?= flashr $(FLASHFILE)
+DEBUGGER_FLAGS ?= debugr $(ELFFILE)
+
+# this board uses openocd
+include $(RIOTMAKE)/tools/openocd.inc.mk
