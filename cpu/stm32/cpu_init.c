@@ -43,7 +43,7 @@
 #define BIT_APB_PWREN       RCC_APB1ENR1_PWREN
 #elif defined (CPU_FAM_STM32G0)
 #define BIT_APB_PWREN       RCC_APBENR1_PWREN
-#else
+#elif !defined(CPU_FAM_STM32MP1)
 #define BIT_APB_PWREN       RCC_APB1ENR_PWREN
 #endif
 
@@ -151,7 +151,7 @@ void cpu_init(void)
     /* initialize the Cortex-M core */
     cortexm_init();
     /* enable PWR module */
-#ifndef CPU_FAM_STM32WB
+#if !defined(CPU_FAM_STM32WB) && !defined(CPU_FAM_STM32MP1)
     periph_clk_en(APB1, BIT_APB_PWREN);
 #endif
 #if defined(CPU_FAM_STM32F0) || defined(CPU_FAM_STM32F1) || \
