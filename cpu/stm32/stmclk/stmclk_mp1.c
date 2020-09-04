@@ -22,6 +22,8 @@
 #include "stmclk.h"
 #include "periph_conf.h"
 
+#ifdef STM32MP1_ENGINEERING_MODE
+
 /* make sure we have all needed information about the clock configuration */
 #ifndef CLOCK_HSE
 #error "Please provide CLOCK_HSE in your board's perhip_conf.h"
@@ -153,3 +155,5 @@ void stmclk_init_sysclk(void)
 
     irq_restore(is);
 }
+
+#endif /* STM32MP1_ENGINEERING_MODE */
