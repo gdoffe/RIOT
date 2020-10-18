@@ -320,7 +320,7 @@ else ifeq ($(STM32_TYPE), MP)
     # As the table should be 128 word aligned, vector table size reserved is 0x400.
     ifeq ($(STM32_MODEL), 157)
       ROM_START_ADDR ?= 0x0
-      ifeq (1,$(STM32MP1_ENGINEERING_MODE))
+      ifneq (,$(filter stm32mp1_eng_mode,$(USEMODULE)))
         ROM_OFFSET ?= 0x400
       endif
       ROM_LEN ?= 64K

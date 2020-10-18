@@ -22,7 +22,7 @@
 #include "stmclk.h"
 #include "periph_conf.h"
 
-#ifdef STM32MP1_ENGINEERING_MODE
+#if IS_USED(MODULE_STM32MP1_ENG_MODE)
 
 /* PLL configuration */
 #if IS_ACTIVE(CONFIG_BOARD_HAS_HSE)
@@ -227,4 +227,4 @@ void stmclk_init_sysclk(void)
     irq_restore(is);
 }
 
-#endif /* STM32MP1_ENGINEERING_MODE */
+#endif /* IS_USED(MODULE_STM32MP1_ENG_MODE) */

@@ -63,7 +63,7 @@ extern "C" {
  * (Cortex-M4 only), because it could override Cortex-A7 clock
  * settings.
  */
-#ifdef STM32MP1_ENGINEERING_MODE
+#if IS_USED(MODULE_STM32MP1_ENG_MODE)
 
 #define CLOCK_MCU_DIV       RCC_MCUDIVR_MCUDIV_0       /* max 209MHz */
 #define CLOCK_APB1_DIV      RCC_APB1DIVR_APB1DIV_1     /* max 104MHz */
@@ -93,7 +93,7 @@ static const uart_conf_t uart_config[] = {
         .rx_af      = GPIO_AF8,
         .tx_af      = GPIO_AF7,
         .bus        = APB1,
-#ifdef STM32MP1_ENGINEERING_MODE
+#if IS_USED(MODULE_STM32MP1_ENG_MODE)
         .clk_src    = RCC_UART35CKSELR_UART35SRC_4, /* HSE clock source */
 #else
         .clk_src    = RCC_UART35CKSELR_UART35SRC_2, /* HSI clock source */

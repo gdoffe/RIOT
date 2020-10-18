@@ -3,7 +3,7 @@ INCLUDES += -I$(RIOTBOARD)/common/stm32/include
 
 # Uncomment this line to build firmware in Engineering mode (BOOT0 off and
 # BOOT2 on)
-#STM32MP1_ENGINEERING_MODE = 1
+USEMODULE += stm32mp1_eng_mode
 
 # set default port depending on operating system
 PORT_LINUX ?= /dev/ttyACM0

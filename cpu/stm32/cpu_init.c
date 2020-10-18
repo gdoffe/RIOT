@@ -160,7 +160,7 @@ void cpu_init(void)
     defined(CPU_FAM_STM32L1)
     _gpio_init_ain();
 #endif
-#if !defined(CPU_FAM_STM32MP1) || defined(STM32MP1_ENGINEERING_MODE)
+#if !defined(CPU_FAM_STM32MP1) || IS_USED(MODULE_STM32MP1_ENG_MODE)
     /* initialize the system clock as configured in the periph_conf.h */
     stmclk_init_sysclk();
 #endif
