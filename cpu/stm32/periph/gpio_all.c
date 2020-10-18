@@ -50,19 +50,16 @@ static gpio_isr_ctx_t isr_ctx[EXTI_NUMOF];
 #define EXTI_REG_FTSR       (EXTI->FTSR1)
 #define EXTI_REG_PR         (EXTI->PR1)
 #define EXTI_REG_IMR        (EXTI->IMR1)
-#define EXTI_CR             SYSCFG
 #elif defined(CPU_FAM_STM32MP1)
 #define EXTI_REG_RTSR       (EXTI->RTSR1)
 #define EXTI_REG_FTSR       (EXTI->FTSR1)
 #define EXTI_REG_PR         (EXTI->PR1)
 #define EXTI_REG_IMR        (EXTI_C2->IMR1)
-#define EXTI_CR             EXTI
 #else
 #define EXTI_REG_RTSR       (EXTI->RTSR)
 #define EXTI_REG_FTSR       (EXTI->FTSR)
 #define EXTI_REG_PR         (EXTI->PR)
 #define EXTI_REG_IMR        (EXTI->IMR)
-#define EXTI_CR             SYSCFG
 #endif
 
 /**
@@ -309,10 +306,14 @@ int gpio_init_int(gpio_t pin, gpio_mode_t mode, gpio_flank_t flank,
     /* enable specific pin as exti sources */
     EXTI->EXTICR[pin_num >> 2] &= ~(0xf << ((pin_num & 0x03) * 8));
     EXTI->EXTICR[pin_num >> 2] |= (port_num << ((pin_num & 0x03) * 8));
+#elif defined(CPU_FAM_STM32MP1)
+    /* enable specific pin as exti sources */
+    EXTI->EXTICR[pin_num >> 2] &= ~(0xf << ((pin_num & 0x03) * 4));
+    EXTI->EXTICR[pin_num >> 2] |= (port_num << ((pin_num & 0x03) * 4));
 #else
     /* enable specific pin as exti sources */
-    EXTI_CR->EXTICR[pin_num >> 2] &= ~(0xf << ((pin_num & 0x03) * 4));
-    EXTI_CR->EXTICR[pin_num >> 2] |= (port_num << ((pin_num & 0x03) * 4));
+    SYSCFG->EXTICR[pin_num >> 2] &= ~(0xf << ((pin_num & 0x03) * 4));
+    SYSCFG->EXTICR[pin_num >> 2] |= (port_num << ((pin_num & 0x03) * 4));
 #endif
 
 #if defined(CPU_FAM_STM32G0) || defined(CPU_FAM_STM32MP1)
