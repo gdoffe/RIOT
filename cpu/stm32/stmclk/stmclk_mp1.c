@@ -24,41 +24,125 @@
 
 #ifdef STM32MP1_ENGINEERING_MODE
 
-/* make sure we have all needed information about the clock configuration */
-#ifndef CLOCK_HSE
-#error "Please provide CLOCK_HSE in your board's perhip_conf.h"
-#endif
-#ifndef CLOCK_LSE
-#error "Please provide CLOCK_LSE in your board's periph_conf.h"
-#endif
-#ifndef CLOCK_CORECLOCK
-#error "Please provide CLOCK_CORECLOCK in your board's periph_conf.h"
-#endif
-
-/**
- * @name    PLL configuration
- * @{
- */
-
-/* figure out which input to use */
-#if (CLOCK_HSE)
-#define PLL_SRC                  RCC_RCK3SELR_PLL3SRC_1 /* HSE */
+/* PLL configuration */
+#if IS_ACTIVE(CONFIG_BOARD_HAS_HSE)
+#define PLL_SRC                     RCC_RCK3SELR_PLL3SRC_1
 #else
-#define PLL_SRC                  RCC_RCK3SELR_PLL3SRC_0 /* HSI */
+#define PLL_SRC                     RCC_RCK3SELR_PLL3SRC_0
 #endif
 
-/* now we get the actual bitfields */
-#define PLL_P                   (((CLOCK_PLL_P / 2)) << RCC_PLL3CFGR2_DIVP_Pos)
-#define PLL_M                   ((CLOCK_PLL_M) << RCC_PLL3CFGR1_DIVM3_Pos)
-#define PLL_N                   ((CLOCK_PLL_N) << RCC_PLL3CFGR1_DIVN_Pos)
-#define PLL_Q                   ((CLOCK_PLL_Q) << RCC_PLL3CFGR2_DIVQ_Pos)
-#if defined(RCC_PLL3CFGR2_DIVR) && defined(CLOCK_PLL_R)
-#define PLL_R                   ((CLOCK_PLL_R) << RCC_PLL3CFGR2_DIVR_Pos)
+/* Compute the bitfields for the PLL configuration */
+#define PLL_P                       (((CONFIG_CLOCK_PLL_P / 2)) << RCC_PLL3CFGR2_DIVP_Pos)
+#define PLL_M                       ((CONFIG_CLOCK_PLL_M) << RCC_PLL3CFGR1_DIVM3_Pos)
+#define PLL_N                       ((CONFIG_CLOCK_PLL_N) << RCC_PLL3CFGR1_DIVN_Pos)
+#define PLL_Q                       ((CONFIG_CLOCK_PLL_Q) << RCC_PLL3CFGR2_DIVQ_Pos)
+#if defined(RCC_PLL3CFGR2_DIVR) && defined(CONFIG_CLOCK_PLL_R)
+#define PLL_R                       ((CONFIG_CLOCK_PLL_R) << RCC_PLL3CFGR2_DIVR_Pos)
 #else
-#define PLL_R                   (0)
+#define PLL_R                       (0)
 #endif
 
-/** @} */
+/* Configure HLCK and PCLK prescalers */
+#if CONFIG_CLOCK_MCU_DIV == 1
+#define CLOCK_MCU_DIV              (RCC_MCUDIVR_MCUDIV_0)
+#elif CONFIG_CLOCK_MCU_DIV == 2
+#define CLOCK_MCU_DIV              (RCC_MCUDIVR_MCUDIV_1)
+#elif CONFIG_CLOCK_MCU_DIV == 4
+#define CLOCK_MCU_DIV              (RCC_MCUDIVR_MCUDIV_2)
+#elif CONFIG_CLOCK_MCU_DIV == 8
+#define CLOCK_MCU_DIV              (RCC_MCUDIVR_MCUDIV_3)
+#elif CONFIG_CLOCK_MCU_DIV == 16
+#define CLOCK_MCU_DIV              (RCC_MCUDIVR_MCUDIV_4)
+#elif CONFIG_CLOCK_MCU_DIV == 32
+#define CLOCK_MCU_DIV              (RCC_MCUDIVR_MCUDIV_5)
+#elif CONFIG_CLOCK_MCU_DIV == 64
+#define CLOCK_MCU_DIV              (RCC_MCUDIVR_MCUDIV_6)
+#elif CONFIG_CLOCK_MCU_DIV == 128
+#define CLOCK_MCU_DIV              (RCC_MCUDIVR_MCUDIV_7)
+#elif CONFIG_CLOCK_MCU_DIV == 256
+#define CLOCK_MCU_DIV              (RCC_MCUDIVR_MCUDIV_8)
+#elif CONFIG_CLOCK_MCU_DIV == 512
+#define CLOCK_MCU_DIV              (RCC_MCUDIVR_MCUDIV_9)
+#else
+#error "Invalid MCU prescaler value (only 1, 2, 4, 8, 16, 32, 64, 128, 256 and \
+512 allowed)"
+#endif
+
+#if CONFIG_CLOCK_APB1_DIV == 1
+#define CLOCK_APB1_DIV              (RCC_APB1DIVR_APB1DIV_0)
+#elif CONFIG_CLOCK_APB1_DIV == 2
+#define CLOCK_APB1_DIV              (RCC_APB1DIVR_APB1DIV_1)
+#elif CONFIG_CLOCK_APB1_DIV == 4
+#define CLOCK_APB1_DIV              (RCC_APB1DIVR_APB1DIV_2)
+#elif CONFIG_CLOCK_APB1_DIV == 8
+#define CLOCK_APB1_DIV              (RCC_APB1DIVR_APB1DIV_3)
+#elif CONFIG_CLOCK_APB1_DIV == 16
+#define CLOCK_APB1_DIV              (RCC_APB1DIVR_APB1DIV_4)
+#else
+#error "Invalid APB1 prescaler value (only 1, 2, 4, 8 and 16 allowed)"
+#endif
+
+#if CONFIG_CLOCK_APB2_DIV == 1
+#define CLOCK_APB2_DIV              (RCC_APB2DIVR_APB2DIV_0)
+#elif CONFIG_CLOCK_APB2_DIV == 2
+#define CLOCK_APB2_DIV              (RCC_APB2DIVR_APB2DIV_1)
+#elif CONFIG_CLOCK_APB2_DIV == 4
+#define CLOCK_APB2_DIV              (RCC_APB2DIVR_APB2DIV_2)
+#elif CONFIG_CLOCK_APB2_DIV == 8
+#define CLOCK_APB2_DIV              (RCC_APB2DIVR_APB2DIV_3)
+#elif CONFIG_CLOCK_APB2_DIV == 16
+#define CLOCK_APB2_DIV              (RCC_APB2DIVR_APB2DIV_4)
+#else
+#error "Invalid APB2 prescaler value (only 1, 2, 4, 8 and 16 allowed)"
+#endif
+
+#if CONFIG_CLOCK_APB3_DIV == 1
+#define CLOCK_APB3_DIV              (RCC_APB3DIVR_APB3DIV_0)
+#elif CONFIG_CLOCK_APB3_DIV == 2
+#define CLOCK_APB3_DIV              (RCC_APB3DIVR_APB3DIV_1)
+#elif CONFIG_CLOCK_APB3_DIV == 4
+#define CLOCK_APB3_DIV              (RCC_APB3DIVR_APB3DIV_2)
+#elif CONFIG_CLOCK_APB3_DIV == 8
+#define CLOCK_APB3_DIV              (RCC_APB3DIVR_APB3DIV_3)
+#elif CONFIG_CLOCK_APB3_DIV == 16
+#define CLOCK_APB3_DIV              (RCC_APB3DIVR_APB3DIV_4)
+#else
+#error "Invalid APB3 prescaler value (only 1, 2, 4, 8 and 16 allowed)"
+#endif
+
+/* Check whether PLL must be enabled:
+  - When PLL is used as SYSCLK
+  - When PLLQ is required
+*/
+#if IS_ACTIVE(CONFIG_USE_CLOCK_PLL) || IS_ACTIVE(CONFIG_CLOCK_ENABLE_PLLQ)
+#define CLOCK_ENABLE_PLL                1
+#else
+#define CLOCK_ENABLE_PLL                0
+#endif
+
+/* Check whether HSE must be enabled:
+  - When HSE is used as SYSCLK
+  - When PLL is used as SYSCLK and the board provides HSE (since HSE will be
+    used as PLL input clock)
+*/
+#if IS_ACTIVE(CONFIG_USE_CLOCK_HSE) || \
+    (IS_ACTIVE(CONFIG_BOARD_HAS_HSE) && IS_ACTIVE(CLOCK_ENABLE_PLL))
+#define CLOCK_ENABLE_HSE                1
+#else
+#define CLOCK_ENABLE_HSE                0
+#endif
+
+/* Check whether HSI must be enabled:
+  - When HSI is used as SYSCLK
+  - When PLL is used as SYSCLK and the board doesn't provide HSE (since HSI will be
+    used as PLL input clock)
+*/
+#if IS_ACTIVE(CONFIG_USE_CLOCK_HSI) || \
+    (!IS_ACTIVE(CONFIG_BOARD_HAS_HSE) && IS_ACTIVE(CLOCK_ENABLE_PLL))
+#define CLOCK_ENABLE_HSI                1
+#else
+#define CLOCK_ENABLE_HSI                0
+#endif
 
 void stmclk_enable_hsi(void)
 {
@@ -118,19 +202,6 @@ void stmclk_init_sysclk(void)
 
     /* disable all active clocks except HSI -> resets the clk configuration */
     RCC->OCENCLRR = ~(RCC_OCENSETR_HSION);
-
-#if (CLOCK_MCO1_SRC)
-#ifndef RCC_CFGR_MCO1
-#error "stmclk: no MCO1 on this device"
-#endif
-    RCC->CFGR |= CLOCK_MCO1_SRC | CLOCK_MCO1_PRE;
-#endif
-#if (CLOCK_MCO2_SRC)
-#ifndef RCC_CFGR_MCO2
-#error "stmclk: no MCO2 on this device"
-#endif
-    RCC->CFGR |= CLOCK_MCO2_SRC | CLOCK_MCO2_PRE;
-#endif
 
     /* if configured, we need to enable the HSE clock now */
 #if (CLOCK_HSE)
