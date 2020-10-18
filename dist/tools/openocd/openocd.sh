@@ -305,7 +305,8 @@ do_flashr() {
             -c 'gdb_port 0' \
             -c 'init' \
             -c 'targets ${OPENOCD_CORE}' \
-            -c 'reset halt' \
+            -c 'reset' \
+            -c 'halt' \
             -c 'load_image \"${IMAGE_FILE}\" ' \
             -c 'resume ${START_ADDR}' \
             -c 'shutdown'" &&
