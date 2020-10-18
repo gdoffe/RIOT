@@ -309,15 +309,15 @@ else ifeq ($(STM32_ROMSIZE), I)
   ROM_LEN = 2048K
 else ifeq ($(STM32_TYPE), MP)
   ifeq ($(STM32_FAMILY), 1)
-# STM32MP1 family has no flash ROM memory.
-# Thus a part of SRAM must be considered as ROM.
-# RETRAM (0x0 address) is setup as ROM by default.
-# However in RIOT, vector table is relocated using VTOR register.
-# Considering the minimum alignment is 128 words and knowing the number of
-# interrupt vectors for a given MCU, if a device has for example 150 interrupt
-# channels:
-# Vector table has a size of 150 * 4 = 600 = 0x258
-# As the table should be 128 word aligned, vector table size reserved is 0x400.
+    # STM32MP1 family has no flash ROM memory.
+    # Thus a part of SRAM must be considered as ROM.
+    # RETRAM (0x0 address) is setup as ROM by default.
+    # However in RIOT, vector table is relocated using VTOR register.
+    # Considering the minimum alignment is 128 words and knowing the number of
+    # interrupt vectors for a given MCU, if a device has for example 150 interrupt
+    # channels:
+    # Vector table has a size of 150 * 4 = 600 = 0x258
+    # As the table should be 128 word aligned, vector table size reserved is 0x400.
     ifeq ($(STM32_MODEL), 157)
       ROM_START_ADDR ?= 0x0
       ifeq (1,$(STM32MP1_ENGINEERING_MODE))
