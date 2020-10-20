@@ -30,12 +30,17 @@
 #endif
 
 /* Compute the bitfields for the PLL configuration */
-#define PLL_P                       (((CONFIG_CLOCK_PLL_P / 2)) << RCC_PLL3CFGR2_DIVP_Pos)
-#define PLL_M                       ((CONFIG_CLOCK_PLL_M) << RCC_PLL3CFGR1_DIVM3_Pos)
-#define PLL_N                       ((CONFIG_CLOCK_PLL_N) << RCC_PLL3CFGR1_DIVN_Pos)
-#define PLL_Q                       ((CONFIG_CLOCK_PLL_Q) << RCC_PLL3CFGR2_DIVQ_Pos)
+#define PLL_P                       (((CONFIG_CLOCK_PLL_P / 2)) \
+        << RCC_PLL3CFGR2_DIVP_Pos)
+#define PLL_M                       ((CONFIG_CLOCK_PLL_M)       \
+        << RCC_PLL3CFGR1_DIVM3_Pos)
+#define PLL_N                       ((CONFIG_CLOCK_PLL_N)       \
+        << RCC_PLL3CFGR1_DIVN_Pos)
+#define PLL_Q                       ((CONFIG_CLOCK_PLL_Q)       \
+        << RCC_PLL3CFGR2_DIVQ_Pos)
 #if defined(RCC_PLL3CFGR2_DIVR) && defined(CONFIG_CLOCK_PLL_R)
-#define PLL_R                       ((CONFIG_CLOCK_PLL_R) << RCC_PLL3CFGR2_DIVR_Pos)
+#define PLL_R                       ((CONFIG_CLOCK_PLL_R)       \
+        << RCC_PLL3CFGR2_DIVR_Pos)
 #else
 #define PLL_R                       (0)
 #endif
@@ -62,8 +67,8 @@
 #elif CONFIG_CLOCK_MCU_DIV == 512
 #define CLOCK_MCU_DIV              (RCC_MCUDIVR_MCUDIV_9)
 #else
-#error "Invalid MCU prescaler value (only 1, 2, 4, 8, 16, 32, 64, 128, 256 and \
-512 allowed)"
+#error "Invalid MCU prescaler value (only 1, 2, 4, 8, 16, 32, 64, 128, 256 \
+and 512 allowed)"
 #endif
 
 #if CONFIG_CLOCK_APB1_DIV == 1
