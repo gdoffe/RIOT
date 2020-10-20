@@ -1,11 +1,9 @@
 /*
- * Copyright (C) 2018 Freie Universität Berlin
- *               2017 OTA keys S.A.
- *               2018-2020 Inria
+ * Copyright (C) 2020 Savoir-faire Linux
  *
- * This file is subject to the terms and conditions of the GNU Lesser
- * General Public License v2.1. See the file LICENSE in the top level
- * directory for more details.
+ * This file is subject to the terms and conditions of the GNU Lesser General
+ * Public License v2.1. See the file LICENSE in the top level directory for more
+ * details.
  */
 
 /**
@@ -13,11 +11,9 @@
  * @{
  *
  * @file
- * @brief       Base STM32F4 clock configuration
+ * @brief       Base STM32MP1 clock configuration
  *
- * @author      Hauke Petersen <hauke.petersen@fu-berlin.de>
- * @author      Vincent Dupont <vincent@otakeys.com>
- * @author      Alexandre Abadie <alexandre.abadie@inria.fr>
+ * @author      Gilles DOFFE <gilles.doffe@savoirfairelinux.com>
  */
 
 #ifndef MP1_CFG_CLOCK_COMMON_H
