@@ -14,8 +14,6 @@
  * @brief       Board specific implementations for the STM32MP157C-DK2 board
  *
  * @author      Gilles DOFFE <gilles.doffe@savoirfairelinux.com>
- *
- * @}
  */
 
 #ifndef PERIPH_CONF_H
