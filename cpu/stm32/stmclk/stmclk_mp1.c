@@ -204,13 +204,15 @@ void stmclk_init_sysclk(void)
  #endif
 
     /* Configure SYSCLK */
-#if (IS_ACTIVE(CLOCK_ENABLE_PLL))
-    RCC->MSSCKSELR = RCC_MSSCKSELR_MCUSSRC_3; /* PLL3 */
-#elif (IS_ACTIVE(CLOCK_ENABLE_HSE))
-    RCC->MSSCKSELR = RCC_MSSCKSELR_MCUSSRC_1; /* HSE */
-#else
-    RCC->MSSCKSELR = RCC_MSSCKSELR_MCUSSRC_0; /* HSI by default */
-#endif
+    if (IS_ACTIVE(CLOCK_ENABLE_PLL)) {
+        RCC->MSSCKSELR = RCC_MSSCKSELR_MCUSSRC_3; /* PLL3 */
+    }
+    else if (IS_ACTIVE(CLOCK_ENABLE_HSE)) {
+        RCC->MSSCKSELR = RCC_MSSCKSELR_MCUSSRC_1; /* HSE */
+    }
+    else {
+        RCC->MSSCKSELR = RCC_MSSCKSELR_MCUSSRC_0; /* HSI by default */
+    }
     /* Wait SYSCLK to be ready */
     while (!(RCC->MSSCKSELR & RCC_MSSCKSELR_MCUSSRCRDY)) {}
 
