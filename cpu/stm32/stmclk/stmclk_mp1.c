@@ -22,8 +22,6 @@
 #include "stmclk.h"
 #include "periph_conf.h"
 
-#if IS_USED(MODULE_STM32MP1_ENG_MODE)
-
 /* PLL configuration */
 #if IS_ACTIVE(CONFIG_BOARD_HAS_HSE)
 #define PLL_SRC                     RCC_RCK3SELR_PLL3SRC_1
@@ -132,32 +130,10 @@
 #define CLOCK_ENABLE_HSE                0
 #endif
 
-/* Check whether HSI must be enabled:
-  - When HSI is used as SYSCLK
-  - When PLL is used as SYSCLK and the board doesn't provide HSE (since HSI will be
-    used as PLL input clock)
-*/
-#if IS_ACTIVE(CONFIG_USE_CLOCK_HSI) || \
-    (!IS_ACTIVE(CONFIG_BOARD_HAS_HSE) && IS_ACTIVE(CLOCK_ENABLE_PLL))
-#define CLOCK_ENABLE_HSI                1
-#else
-#define CLOCK_ENABLE_HSI                0
-#endif
-
 void stmclk_enable_hsi(void)
 {
     RCC->OCENSETR |= RCC_OCENSETR_HSION;
     while (!(RCC->OCRDYR & RCC_OCRDYR_HSIRDY)) {}
-}
-
-void stmclk_disable_hsi(void)
-{
-    /* we only disable the HSI clock if not used as input for the PLL and if
-     * not used directly as system clock */
-    if (CLOCK_HSE) {
-        RCC->OCENCLRR |= RCC_OCENCLRR_HSION;
-        while (!(RCC->OCRDYR & RCC_OCRDYR_HSIRDY)) {}
-    }
 }
 
 static void stmclk_enable_hse(void)
@@ -204,10 +180,11 @@ void stmclk_init_sysclk(void)
     RCC->OCENCLRR = ~(RCC_OCENSETR_HSION);
 
     /* if configured, we need to enable the HSE clock now */
-#if (CLOCK_HSE)
+#if (IS_ACTIVE(CLOCK_ENABLE_HSE))
     stmclk_enable_hse();
 #endif
 
+#if (IS_ACTIVE(CLOCK_ENABLE_PLL))
     /* now we can safely configure the PLL */
     RCC->PLL3CFGR1 = (PLL_M | PLL_N);
     RCC->PLL3CFGR2 = (PLL_P | PLL_Q | PLL_R);
@@ -219,12 +196,18 @@ void stmclk_init_sysclk(void)
     RCC->PLL3CR |= (RCC_PLL3CR_DIVPEN | RCC_PLL3CR_DIVQEN
             | RCC_PLL3CR_DIVREN | RCC_PLL3CR_PLLON);
     while (!(RCC->PLL3CR & RCC_PLL3CR_PLL3RDY)) {}
+ #endif
 
-    /* now that the PLL is running, we use it as system clock */
+    /* Configure SYSCLK */
+#if (IS_ACTIVE(CLOCK_ENABLE_PLL))
     RCC->MSSCKSELR = RCC_MSSCKSELR_MCUSSRC_3; /* PLL3 */
+#elif (IS_ACTIVE(CLOCK_ENABLE_HSE))
+    RCC->MSSCKSELR = RCC_MSSCKSELR_MCUSSRC_1; /* HSE */
+#else
+    RCC->MSSCKSELR = RCC_MSSCKSELR_MCUSSRC_0; /* HSI by default */
+#endif
+    /* Wait SYSCLK to be ready */
     while (!(RCC->MSSCKSELR & RCC_MSSCKSELR_MCUSSRCRDY)) {}
 
     irq_restore(is);
 }
-
-#endif /* IS_USED(MODULE_STM32MP1_ENG_MODE) */
