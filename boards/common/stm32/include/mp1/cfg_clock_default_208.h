@@ -29,14 +29,18 @@ extern "C" {
  * @name    Clock PLL settings (208MHz)
  * @{
  */
-/* The following parameters configure a 208MHz system clock with HSE (8MHz or
-   16MHz) or HSI (16MHz) as PLL input clock */
-#if IS_ACTIVE(CONFIG_BOARD_HAS_HSE) && (CLOCK_HSE == MHZ(24))
+/* The following parameters configure a 208MHz system clock with HSE (24MHz)
+ * or HSI (16MHz) as PLL input clock */
 #ifndef CONFIG_CLOCK_PLL_M
 #define CONFIG_CLOCK_PLL_M              (2)
 #endif
+#if IS_ACTIVE(CONFIG_BOARD_HAS_HSE) && (CLOCK_HSE == MHZ(24))
 #ifndef CONFIG_CLOCK_PLL_N
 #define CONFIG_CLOCK_PLL_N              (52)
+#endif
+#else /* HSI */
+#ifndef CONFIG_CLOCK_PLL_N
+#define CONFIG_CLOCK_PLL_N              (78)
 #endif
 #endif
 #ifndef CONFIG_CLOCK_PLL_P
@@ -47,23 +51,6 @@ extern "C" {
 #endif
 #ifndef CONFIG_CLOCK_PLL_R
 #define CONFIG_CLOCK_PLL_R              (3)
-
-#else /* HSI */
-#ifndef CONFIG_CLOCK_PLL_M
-#define CONFIG_CLOCK_PLL_M              (4)
-#endif
-#ifndef CONFIG_CLOCK_PLL_N
-#define CONFIG_CLOCK_PLL_N              (25)
-#endif
-#endif
-#ifndef CONFIG_CLOCK_PLL_P
-#define CONFIG_CLOCK_PLL_P              (2)
-#endif
-#ifndef CONFIG_CLOCK_PLL_Q
-#define CONFIG_CLOCK_PLL_Q              (13)
-#endif
-#ifndef CONFIG_CLOCK_PLL_R
-#define CONFIG_CLOCK_PLL_R              (37)
 #endif
 /** @} */
 
